@@ -3,8 +3,10 @@
 const container = document.querySelector('.container');
 const table = document.querySelector('.field tbody');
 
-let rowAmount = table.children.length;
-let columnAmount = table.children[0].children.length;
+let rowAmount = table?.children.length || 0;
+let columnAmount = table?.children[0].children.length || 0;
+
+changeButtonState();
 
 container.addEventListener('click', (e) => {
   if (e.target.closest('.append-row')) {
@@ -28,7 +30,9 @@ container.addEventListener('click', (e) => {
   }
 
   if (e.target.closest('.remove-row')) {
-    table.children[rowAmount - 1].remove();
+    if (rowAmount > 0) {
+      table.children[rowAmount - 1].remove();
+    }
 
     rowAmount = table.children.length;
 
@@ -53,7 +57,9 @@ container.addEventListener('click', (e) => {
 
   if (e.target.closest('.remove-column')) {
     for (let i = 0; i < rowAmount; i++) {
-      table.children[i].children[columnAmount - 1].remove();
+      if (columnAmount > 0) {
+        table.children[i].children[columnAmount - 1].remove();
+      }
     }
 
     columnAmount = table.children[0].children.length;
