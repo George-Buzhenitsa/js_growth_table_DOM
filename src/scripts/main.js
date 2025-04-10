@@ -1,3 +1,73 @@
 'use strict';
 
-// write code here
+const container = document.querySelector('.container');
+const table = document.querySelector('.field tbody');
+
+let rowAmount = table.children.length;
+let columnAmount = table.children[0].children.length;
+
+container.addEventListener('click', (e) => {
+  if (e.target.closest('.append-row')) {
+    if (rowAmount >= 10) {
+      return;
+    }
+
+    const newTr = document.createElement('tr');
+
+    for (let i = 0; i < columnAmount; i++) {
+      const newTd = document.createElement('td');
+
+      newTr.append(newTd);
+    }
+
+    table.append(newTr);
+
+    rowAmount = table.children.length;
+
+    changeButtonState();
+  }
+
+  if (e.target.closest('.remove-row')) {
+    table.children[rowAmount - 1].remove();
+
+    rowAmount = table.children.length;
+
+    changeButtonState();
+  }
+
+  if (e.target.closest('.append-column')) {
+    if (columnAmount >= 10) {
+      return;
+    }
+
+    for (let i = 0; i < rowAmount; i++) {
+      const newTd = document.createElement('td');
+
+      table.children[i].append(newTd);
+    }
+
+    columnAmount = table.children[0].children.length;
+
+    changeButtonState();
+  }
+
+  if (e.target.closest('.remove-column')) {
+    for (let i = 0; i < rowAmount; i++) {
+      table.children[i].children[columnAmount - 1].remove();
+    }
+
+    columnAmount = table.children[0].children.length;
+
+    changeButtonState();
+  }
+});
+
+function changeButtonState() {
+  const maxLimit = 10;
+  const minLimit = 2;
+
+  document.querySelector('.append-row').disabled = rowAmount === maxLimit;
+  document.querySelector('.remove-row').disabled = rowAmount === minLimit;
+  document.querySelector('.append-column').disabled = columnAmount === maxLimit;
+  document.querySelector('.remove-column').disabled = columnAmount === minLimit;
+}
